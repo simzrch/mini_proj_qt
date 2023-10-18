@@ -160,9 +160,9 @@ void gestionImage::on_SHA_clicked()
 
     if(monFlux)
     {
-    HashGestion integrite ;
-    monFlux << "Bonjour voici e hachage du fichier demande: " << endl;
-    monFlux << "SHA: " << integrite.CalculateSHA256("../Chiffre/p_chiffre.txt") << endl;
+        HashGestion integrite ;
+        monFlux << "Bonjour voici e hachage du fichier demande: " << endl;
+        monFlux << "SHA : " <<integrite.CalculateFileSHA256("../Chiffre/p_chiffre.txt") << endl;
     }
     else
     {
