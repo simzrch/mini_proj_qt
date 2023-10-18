@@ -42,6 +42,8 @@ private slots:
 
     void on_clear_clicked();
 
+
+
 private:
     Ui::sauvegarde *ui;
 };
