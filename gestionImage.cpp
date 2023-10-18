@@ -114,11 +114,31 @@ void gestionImage::on_pushButton_4_clicked()
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void gestionImage::on_RSAchiff_clicked()
 {
     RsaGestion clef = RsaGestion();
 
-    if(std::filesystem::exists("../mesClefs/celfPub.pem, ../mesClefs/celfPrive.pem ") == 0){
+    if(std::filesystem::exists("../mesClefs/celfPub.pem") == 0  && std::filesystem::exists("../mesClefs/celfPrive.pem ") == 0 )
+    {
     std::cout << "Creation des nouvelles clefs"<< std::endl;
     clef.generationClef("../mesClefs/celfPub.pem","../mesClefs/celfPrive.pem",1024);
     clef.chargementClefs("../mesClefs/celfPub.pem", "../mesClefs/celfPrive.pem");
@@ -126,18 +146,29 @@ void gestionImage::on_RSAchiff_clicked()
     }
     else
     {
-
-    }
     std::cout << "Chargement des anciennes clefs"<< std::endl;
     clef.chargementClefs("../mesClefs/celfPub.pem", "../mesClefs/celfPrive.pem");
     clef.chiffrementFichier("../nonChiffre/p.txt", "../Chiffre/p_chiffre.txt",true);
+    }
 
 }
 
 void gestionImage::on_SHA_clicked()
 {
-    HashGestion integrit ;
-    std::cout<<"le Hachage du fichier est: " << integrit.CalculateSHA256("../mesClefs/Abeille_secrete")<< std::endl;
+    string const nomFichier("../SHA/Hachage_fichier.txt");
+    ofstream monFlux(nomFichier.c_str());
+
+    if(monFlux)
+    {
+    HashGestion integrite ;
+    monFlux << "Bonjour voici e hachage du fichier demande: " << endl;
+    monFlux << "SHA: " << integrite.CalculateSHA256("../Chiffre/p_chiffre.txt") << endl;
+    }
+    else
+    {
+    cout << "ERREUR: Impossible d'ouvrir le fichier." << endl;
+    }
+
 }
 
 void gestionImage::on_AES_clicked()
@@ -176,9 +207,48 @@ void gestionImage::on_pushButton_5_clicked()
 
     ui->label->setText( ui->cin_2->text());
 
-
-
 }
+
+
+ void gestionImage::on_AESdechiff_clicked()
+    {
+        AesGestion clef_secrete ;
+        if(std::filesystem::exists("../mesClefs/Abeille_secrete") == 0)
+        {
+            std::cout << "Creation d'une nouvelle clef"<< std::endl;
+            clef_secrete.GenerateAESKey();
+            clef_secrete.SaveAESKeyToFile("../mesClefs/Abeille_secrete");
+            clef_secrete.LoadAESKeyFromFile("../mesClefs/Abeille_secrete");
+            clef_secrete.DecryptFileAES256("../chiffre/pA_crypte.txt", "../chiffre/pA_decrypte.txt");
+        }
+        else
+        {
+            std::cout << "Chargement de l'ancienne clef"<< std::endl;
+            clef_secrete.LoadAESKeyFromFile("../mesClefs/Abeille_secrete");
+            clef_secrete.DecryptFileAES256("../chiffre/pA_crypte.txt", "../chiffre/pA_decrypte.txt");
+        }
+    }
+
+
+ void gestionImage::on_RSAdechiff_clicked()
+    {
+        RsaGestion clef = RsaGestion();
+
+        if(std::filesystem::exists("../mesClefs/celfPub.pem") == 0  && std::filesystem::exists("../mesClefs/celfPrive.pem ") == 0 )
+        {
+            std::cout << " erreur les clefs n'existe pas "<< std::endl;
+
+        }
+        else
+        {
+            std::cout << "Chargement des clefs"<< std::endl;
+            clef.chargementClefs("../mesClefs/celfPub.pem", "../mesClefs/celfPrive.pem");
+            clef.dechiffrementFichier("../Chiffre/p_chiffre.txt","../Chiffre/p_dechiffre.txt", true);
+        }
+
+    }
+
+
 
 
 

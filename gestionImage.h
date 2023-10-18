@@ -52,6 +52,10 @@ private slots:
 
     void on_AES_clicked();
 
+    void on_AESdechiff_clicked();
+
+    void on_RSAdechiff_clicked();
+
 private:
     Ui::gestionImage *ui;
     int compteur = 0;
